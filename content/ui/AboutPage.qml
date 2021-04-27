@@ -12,7 +12,7 @@ aboutData: {
  "shortDescription" : "Opensource Jeopardy programm written in Python with KDE Frameworks 5.",
  "homepage" : "https://karatek.net",
  "bugAddress" : "submit@karatek.net",
- "version" : ver.text,
+ "version" : 0.1,
  "otherText" : "",
  "authors" : [
      {
