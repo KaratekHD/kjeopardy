@@ -20,6 +20,16 @@ Kirigami.ApplicationWindow {
 		isMenu: true
 		actions: [
             Kirigami.Action {
+                text: "Report bug"
+                icon.name: "dialog-error"
+                onTriggered: bridge.openWebBrowser("https://github.com/KaratekHD/kjeopardy/issues")
+            },
+            Kirigami.Action {
+				text: "Source Code"
+				icon.name: "text-x-script"
+				onTriggered: bridge.openWebBrowser("https://github.com/KaratekHD/kjeopardy") 
+			},
+            Kirigami.Action {
 				text: "About"
 				icon.name: "help-about"
 				onTriggered: pushReplaceLayer(Qt.resolvedUrl("AboutPage.qml")) 

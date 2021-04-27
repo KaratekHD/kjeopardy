@@ -8,6 +8,7 @@ from PySide2.QtWidgets import *
 from PySide2.QtGui import *
 from PySide2.QtQml import QQmlApplicationEngine
 from PySide2.QtCore import *
+import webbrowser
 import os
 
 class Transporter(QObject):
@@ -62,7 +63,8 @@ https://github.com/alex1701c/Screenshots/blob/master/PythonArgparseCLI/customize
 asked_question = [0, 0] # [Column, Number]
 global_jeopardy = ""
 jeopardys = []
-    
+active_jeopardy = ""
+
 class Bridge(QObject):
     
     @Slot(str, int, int, result=bool)
@@ -228,32 +230,59 @@ class Bridge(QObject):
     def get_jeopardy_filename(self, fileid):
         return jeopardys[fileid]
     
+    @Slot(str)
+    def set_jeopardy(self, jeopardy):
+        global global_jeopardy
+        global_jeopardy = jeopardy.replace(".json", "")
+    
+    @Slot(result=str)
+    def get_jeopardy(self):
+        global global_jeopardy
+        return global_jeopardy
+    
+    @Slot(int, result=str)
+    def get_head(self, i):
+        global global_jeopardy
+        with open('jeopardys/' + global_jeopardy + '.json') as json_file:
+            data = json.load(json_file)
+        return data["categories"][i]
+    
+    @Slot(result=str)
+    def get_jeopardy_title_global(self):
+        global global_jeopardy
+        with open('jeopardys/' + global_jeopardy + '.json') as json_file:
+            data = json.load(json_file)
+        return data["title"]
+    
+    @Slot(str)
+    def openWebBrowser(self, url):
+        webbrowser.open(url)
 if __name__ == "__main__":
     # Command line stuff
     parser = argparse.ArgumentParser(description='Opensource Jeopardy programm written in Python with KDE Frameworks 5.', formatter_class=CustomHelpFormatter)
     parser.add_argument('-v', '--version', action='version', version='kjeopardy 1.0')
     args = parser.parse_args()
     # Parse JSON
-    with open('jeopardys/52d4e1b4-1d2a-4596-b8b1-5621bfe3c4c0.json') as json_file:
-        data = json.load(json_file)
-    title = data["title"]
-    description = data["description"]
-    head0 = data["categories"][0]
-    head1 = data["categories"][1]
-    head2 = data["categories"][2]
-    head3 = data["categories"][3]
-    Qtitle = Transporter()
-    Qdescription = Transporter()
-    Qhead0 = Transporter()
-    Qhead1 = Transporter()
-    Qhead2 = Transporter()
-    Qhead3 = Transporter()
-    Qtitle.text = title
-    Qdescription.text = description
-    Qhead0.text = head0
-    Qhead1.text = head1
-    Qhead2.text = head2
-    Qhead3.text = head3
+    #with open('jeopardys/52d4e1b4-1d2a-4596-b8b1-5621bfe3c4c0.json') as json_file:
+    #    data = json.load(json_file)
+    #title = data["title"]
+    #description = data["description"]
+    #head0 = data["categories"][0]
+    #head1 = data["categories"][1]
+    #head2 = data["categories"][2]
+    #head3 = data["categories"][3]
+    #Qtitle = Transporter()
+    #Qdescription = Transporter()
+    #Qhead0 = Transporter()
+    #Qhead1 = Transporter()
+    #Qhead2 = Transporter()
+    #Qhead3 = Transporter()
+    #Qtitle.text = title
+    #Qdescription.text = description
+    #Qhead0.text = head0
+    #Qhead1.text = head1
+    #Qhead2.text = head2
+    #Qhead3.text = head3
     bridge = Bridge()
     
     
@@ -263,13 +292,13 @@ if __name__ == "__main__":
     versionObj = Transporter()
     versionObj.text = "0.1"
     engine = QQmlApplicationEngine()
-    engine.rootContext().setContextProperty("ver", versionObj)
-    engine.rootContext().setContextProperty("jtitle", Qtitle)
-    engine.rootContext().setContextProperty("jdescription", Qdescription)
-    engine.rootContext().setContextProperty("head0", Qhead0)
-    engine.rootContext().setContextProperty("head1", Qhead1)
-    engine.rootContext().setContextProperty("head2", Qhead2)
-    engine.rootContext().setContextProperty("head3", Qhead3)
+    #engine.rootContext().setContextProperty("ver", versionObj)
+    #engine.rootContext().setContextProperty("jtitle", Qtitle)
+    #engine.rootContext().setContextProperty("jdescription", Qdescription)
+    #engine.rootContext().setContextProperty("head0", Qhead0)
+    #engine.rootContext().setContextProperty("head1", Qhead1)
+    #engine.rootContext().setContextProperty("head2", Qhead2)
+    #engine.rootContext().setContextProperty("head3", Qhead3)
     engine.rootContext().setContextProperty("bridge", bridge)
     context = engine.rootContext()
     engine.load("content/ui/main.qml")

@@ -5,20 +5,20 @@ import QtQuick.Layouts 1.2
 import org.kde.kirigami 2.11 as Kirigami
 
 Kirigami.Page {
-    title: jtitle.text
+    title: bridge.get_jeopardy_title_global()
     function processButtonInput(points, collumn) {
         //processQuestion("52d4e1b4-1d2a-4596-b8b1-5621bfe3c4c0", points, collumn) //TODO: Change the UUID stuff later
         //print(bridge.get_is_question("52d4e1b4-1d2a-4596-b8b1-5621bfe3c4c0", points, collumn))
-        if(!(bridge.get_question_exists("52d4e1b4-1d2a-4596-b8b1-5621bfe3c4c0", points, collumn))) {
+        if(!(bridge.get_question_exists(bridge.get_jeopardy(), points, collumn))) {
             showPassiveNotification("Question is undefined.")
             return
             
         }
-        if (bridge.get_is_question("52d4e1b4-1d2a-4596-b8b1-5621bfe3c4c0", points, collumn)) {
-            bridge.set_asked_question("52d4e1b4-1d2a-4596-b8b1-5621bfe3c4c0", points, collumn)
+        if (bridge.get_is_question(bridge.get_jeopardy(), points, collumn)) {
+            bridge.set_asked_question(bridge.get_jeopardy(), points, collumn)
             pageStack.layers.push(Qt.resolvedUrl("MultipleChoice.qml"))
         } else {
-            bridge.set_asked_question("52d4e1b4-1d2a-4596-b8b1-5621bfe3c4c0", points, collumn)
+            bridge.set_asked_question(bridge.get_jeopardy(), points, collumn)
             pageStack.layers.push(Qt.resolvedUrl("game.qml"))
         }
     }
@@ -29,19 +29,19 @@ Kirigami.Page {
         columns: 4
         rows: 6
         Text {
-            text: head0.text
+            text: bridge.get_head(0)
             id: headColumn1
         }
         Text {
-            text: head1.text
+            text: bridge.get_head(1)
             id: headColumn2
         }
         Text {
-            text: head2.text
+            text: bridge.get_head(2)
             id: headColumn3
         }
         Text {
-            text: head3.text
+            text: bridge.get_head(3)
             id: headColumn4
         }
         Controls.Button {

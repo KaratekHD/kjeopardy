@@ -6,32 +6,8 @@ import org.kde.kirigami 2.13 as Kirigami
 Kirigami.ScrollablePage {
     id: startPage
     title: "KJeopardy"
-    header: Controls.ToolBar {
-        id: toolbar
-        RowLayout {
-            anchors.fill: parent
-            Kirigami.SearchField {
-                id: searchField
-
-                Layout.alignment: Qt.AlignHCenter
-                Layout.fillWidth: true
-                Layout.maximumWidth: Kirigami.Units.gridUnit*30
-            }
-        }
-    }
-
-    actions.main: Kirigami.Action {
-		id: addAction
-		icon.name: "list-add"
-		text: i18nc("@action:button", "Add jeopardy")
-		onTriggered:  mainModel.append({"title": "Jeopardy",
-                "image": "../img/fallback_banner.jpg",
-                "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam id risus id augue euismod accumsan. Nunc vestibulum placerat bibendum.",
-                "actions": [{text: "Play", icon: "media-playback-start"}]
-            })
-	}
 	
-	actions.left: Kirigami.Action {
+	actions.main: Kirigami.Action {
         text: "Quit"
         icon.name: "gtk-quit"
         onTriggered: Qt.quit()
@@ -109,7 +85,10 @@ Kirigami.ScrollablePage {
                         Layout.alignment: Qt.AlignRight|Qt.AlignVCenter
                         Layout.columnSpan: 2 
                         text: "Play"
-                        onClicked: pushReplaceLayer(Qt.resolvedUrl("game/GameTable.qml"))
+                        onClicked: {
+                            bridge.set_jeopardy(model.file)
+                            pushReplaceLayer(Qt.resolvedUrl("game/GameTable.qml"))
+                        }
                     }
                 }
             }
